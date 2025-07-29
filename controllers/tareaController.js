@@ -3,7 +3,7 @@ import Tarea from "../models/Tarea.js";
 export const tareas = async (req, res) => {
     const { usuario } = req;
     try {
-        const tareas = await Tarea.findAll({ where: { usuarios_id: usuario.id } });
+        const tareas = await Tarea.findAll({ where: { usuarios_id: usuario.id }, order: [['id', 'DESC']] });
         res.json(tareas);
     } catch (error) {
         res.status(400).json({ msg: error });
