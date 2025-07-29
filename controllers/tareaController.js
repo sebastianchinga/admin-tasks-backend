@@ -63,7 +63,19 @@ export const cambiarEstado = async (req, res) => {
         const tareaActualizado = await tarea.save();
         res.json(tareaActualizado);
     } catch (error) {
-        res.status(400).json({msg: error});
+        res.status(400).json({ msg: error });
     }
-    
+
+}
+
+export const filtrar = async (req, res) => {
+    const { estado } = req.params;
+    const tareas = await Tarea.findAll({ where: { estado } });
+
+    if (tareas.length === 0) {
+        const error = new Error('No existen tareas');
+        return res.status(400).json({ msg: error.message })
+    }
+
+    res.json(tareas)
 }
