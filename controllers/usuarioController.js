@@ -1,5 +1,7 @@
+import enviarConfirmacion from "../helpers/enviarConfirmacion.js";
 import generarJWT from "../helpers/generarJWT.js";
 import generarToken from "../helpers/generarToken.js";
+import recuperarCuenta from "../helpers/recuperarCuenta.js";
 import Usuario from "../models/Usuario.js";
 import bcrypt from 'bcrypt';
 
@@ -21,6 +23,7 @@ export const login = async (req, res) => {
         res.json({
             id: usuario.id,
             nombre: usuario.nombre,
+            email: usuario.email,
             token: generarJWT(usuario.id)
         })
     } else {
@@ -43,6 +46,7 @@ export const registrar = async (req, res) => {
     usuario.password = await bcrypt.hash(usuario.password, salt);
 
     try {
+        await enviarConfirmacion(usuario);
         await usuario.save();
         res.json({ msg: 'Revisa tu e-mail para confirmar tu cuenta' })
     } catch (error) {
@@ -56,7 +60,7 @@ export const confirmar = async (req, res) => {
     const usuario = await Usuario.findOne({ where: { token } });
 
     if (!usuario) {
-        const error = new Error('Este token no existe');
+        const error = new Error('Este token es inválido');
         return res.status(400).json({ msg: error.message })
     }
 
@@ -96,11 +100,11 @@ export const olvidePassword = async (req, res) => {
     }
 
 
-
     usuario.token = generarToken();
     try {
+        await recuperarCuenta(usuario);
         await usuario.save();
-        res.status(400).json({ msg: 'Te hemos enviado instrucciones a tu e-mail' })
+        res.json({ msg: 'Te hemos enviado instrucciones a tu e-mail' })
     } catch (error) {
         res.status(400).json({ msg: error });
     }
@@ -130,6 +134,7 @@ export const cambiarPassword = async (req, res) => {
 
     const salt = await bcrypt.genSalt(10);
     usuario.password = await bcrypt.hash(password, salt);
+    usuario.token = null;
 
     try {
         await usuario.save();

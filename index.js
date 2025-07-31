@@ -13,7 +13,7 @@ db.authenticate().then(() => console.log('Base de datos conectada')).catch(e => 
 
 app.use(express.json());
 
-const dominiosPermitidos = [process.env.URL_BACKEND];
+const dominiosPermitidos = [process.env.URL_FRONTEND];
 const corsOptions = {
     origin: function (origin, callback) {
         if (!origin || dominiosPermitidos.includes(origin)) {

@@ -8,7 +8,7 @@ router.post('/', login);
 router.post('/registrar', registrar);
 router.get('/confirmar/:token', confirmar);
 router.post('/olvide-password', olvidePassword);
-router.route('/olvide-password/:token').get(validarToken).post(cambiarPassword);
+router.route('/olvide-password/:token').get(validarToken).put(cambiarPassword);
 
 router.get('/perfil', authMiddleware, perfil);
 
