@@ -8,7 +8,7 @@ const enviarConfirmacion = async (data) => {
 
     try {
         const { data } = await resend.emails.send({
-            from: "Acme <onboarding@resend.dev>",
+            from: "TaskManager <zonacoderscontacto@zonacoders.com>",
             to: email,
             subject: "Confirma tu Cuenta",
             html: `
