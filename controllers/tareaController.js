@@ -70,7 +70,9 @@ export const cambiarEstado = async (req, res) => {
 
 export const filtrar = async (req, res) => {
     const { estado } = req.params;
-    const tareas = await Tarea.findAll({ where: { estado } });
+    const { usuario } = req;
+    const usuarios_id = usuario.id;
+    const tareas = await Tarea.findAll({ where: { estado, usuarios_id } });
 
     if (tareas.length === 0) {
         const error = new Error('No existen tareas');
