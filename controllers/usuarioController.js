@@ -138,9 +138,24 @@ export const cambiarPassword = async (req, res) => {
 
     try {
         await usuario.save();
-        res.json({msg: 'Password modificado'})
+        res.json({ msg: 'Password modificado' })
     } catch (error) {
-        res.status(400).json({msg: error})
+        res.status(400).json({ msg: error })
     }
 
+}
+
+export const actualizarPerfil = async (req, res) => {
+    const { nombre, email } = req.body
+    const { usuario } = req;
+    const user = await Usuario.findOne({where: {id: usuario.id}});
+    user.nombre = nombre || user.nombre;
+    user.email = email || user.email;
+    
+    try {
+        const usuarioGuardado = await user.save();
+        res.json(usuarioGuardado);
+    } catch (error) {
+        res.status(400).json({msg: 'Hubo un error'});
+    }
 }

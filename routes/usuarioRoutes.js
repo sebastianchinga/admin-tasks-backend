@@ -1,5 +1,5 @@
 import express from 'express';
-import { cambiarPassword, confirmar, login, olvidePassword, perfil, registrar, validarToken } from '../controllers/usuarioController.js';
+import { actualizarPerfil, cambiarPassword, confirmar, login, olvidePassword, perfil, registrar, validarToken } from '../controllers/usuarioController.js';
 import authMiddleware from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
@@ -11,5 +11,6 @@ router.post('/olvide-password', olvidePassword);
 router.route('/olvide-password/:token').get(validarToken).put(cambiarPassword);
 
 router.get('/perfil', authMiddleware, perfil);
+router.put('/actualizar-perfil', authMiddleware, actualizarPerfil);
 
 export default router;
