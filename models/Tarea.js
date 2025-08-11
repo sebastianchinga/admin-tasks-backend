@@ -1,6 +1,7 @@
 import { DataTypes, Sequelize } from "sequelize";
 import db from "../config/db.js";
 import Usuario from "./Usuario.js";
+import Proyecto from "./Proyecto.js";
 
 const Tarea = db.define('tareas', {
     titulo: {
@@ -19,9 +20,16 @@ const Tarea = db.define('tareas', {
             model: Usuario,
             key: 'id'
         }
+    },
+    proyectos_id: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Proyecto,
+            key: 'id'
+        }
     }
 }, {
-    timestamps: false
+    timestamps: true
 })
 
 export default Tarea
