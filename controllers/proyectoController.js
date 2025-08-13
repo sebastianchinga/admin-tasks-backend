@@ -57,6 +57,31 @@ export const editar = async (req, res) => {
         const proyectoEditado = await proyecto.save();
         res.json(proyectoEditado);
     } catch (error) {
-        res.status(400).json({msg: 'No se pudo actualizar el registro'});
+        res.status(400).json({ msg: 'No se pudo actualizar el registro' });
     }
+}
+
+export const eliminar = async (req, res) => {
+    const { id } = req.params;
+    const { usuario } = req;
+    const proyecto = await Proyecto.findOne({ where: { id } });
+
+    if (!proyecto) {
+        const error = new Error('Esta tarea no existe');
+        return res.status(400).json({ msg: error.message });
+    }
+
+    if (proyecto.usuarios_id !== usuario.id) {
+        const error = new Error('No tienes acceso a esta tarea');
+        return res.status(400).json({ msg: error.message });
+    }
+
+    try {
+        await proyecto.destroy();
+        res.json({ msg: 'Tarea eliminada' })
+    } catch (error) {
+        res.status(400).json({ msg: error })
+    }
+
+
 }
